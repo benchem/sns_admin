@@ -1,9 +1,17 @@
 <template>
   <div class="svrlst">
+    <div align="left">
+      <div v-if="!isCreateMode">
+        <el-button @click="onCreate">{{createButtonText}}</el-button>
+        <el-button @click="onReload">{{reloadButtonText}}</el-button>
+      </div>
+      <div v-else>
+        <el-button @click="onSubmit">Save</el-button>
+        <el-button @click="onCancel">Cancel</el-button>
+      </div>
+    </div>
     <div v-if="!isCreateMode">
-      <el-button @click="onCreate">{{createButtonText}}</el-button>
-      <el-button @click="onReload">{{reloadButtonText}}</el-button>
-      <el-table style="width: 90%" :data="serviceArr">
+      <el-table style="width: 100%" :data="serviceArr">
         <el-table-column
           label="Service Key"
           prop="key"
@@ -15,20 +23,22 @@
         ></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <router-link :to="{name:'ServiceDetail', params:{key:scope.row.key}}" class="el-button el-button--text">详情</router-link>
-            <router-link :to="{name:'ServiceInstance', params:{key:scope.row.key}}" class="el-button el-button--text">实例</router-link>
-            <i class='el-icon-delete' @click="onUnreg(scope.row.key)" :v-bind="scope.row.key"></i>
+            <router-link :to="{name:'ServiceDetail', params:{key:scope.row.key}}" class="el-button el-button--text"><i class="el-icon-edit"></i></router-link>
+            <router-link :to="{name:'ServiceInstance', params:{key:scope.row.key}}" class="el-button el-button--text"><i class="el-icon-upload"></i></router-link>
+            &nbsp;<i class='el-icon-delete' @click="onUnreg(scope.row.key)" :v-bind="scope.row.key"></i>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <div v-else>
-      <label for="txtSvrName">Service Name</label>
-      <input type="text" name="txtSvrName" v-model="createObj.key">
-      <label for="txtSvrDesc">Service Desc</label>
-      <input type="text" name="txtSvrDesc" v-model="createObj.desc">
-      <button @click="onSubmit">Save</button>
-      <button @click="onCancel">Cancel</button>
+      <el-form>
+        <el-form-item label="Service Name">
+          <el-input type="text" name="txtSvrName" v-model="createObj.key" placeholder="Service Name"></el-input>
+        </el-form-item>
+        <el-form-item label="Service Desc">
+          <el-input type="text" name="txtSvrDesc" v-model="createObj.desc" placeholder="Service Desc"></el-input>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -83,6 +93,11 @@ export default {
             alert(response.data.errmsg)
             return
           }
+          that.$message({
+            showClose: true,
+            message: '服务注册成功',
+            type: 'success'
+          })
           reloadList(that)
           that.isCreateMode = false
         }
@@ -96,7 +111,31 @@ export default {
       this.isCreateMode = false
     },
     onUnreg: function (microKey) {
-      alert(microKey)
+      let that = this
+      this.$confirm('是否注销 ' + microKey + ' 服务?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        axios.post(that.GLOBAL.apiHost + '/svc/unregister2', {
+          serviceKey: microKey
+        }).then((response) => {
+          if (response.data.statecode !== 0) {
+            that.$message({
+              showClose: true,
+              type: 'error',
+              message: response.data.errmsg
+            })
+            return
+          }
+          that.$message({
+            showClose: true,
+            message: '服务注销成功',
+            type: 'success'
+          })
+          that.serviceArr.splice(that.serviceArr.findIndex(item => item.key === microKey), 1)
+        })
+      })
     }
   }
 }
