@@ -1,13 +1,11 @@
 <template>
-    <ListItem>
-        <li>
-            <div>
-                <label>{{microService.key}}</label>
-                <label class="desc">{{microService.desc}}</label>
-                <router-link :to="{name:'ServiceDetail', params:{key:microService.key}}">详情</router-link> | <a href="#" @click="onUnreg" :v-bind="microService.key">注销</a>
-            </div>
-        </li>
-    </ListItem>
+  <li>
+      <div>
+          <label>{{microService.key}}</label>
+          <label class="desc">{{microService.desc}}</label>
+          <router-link :to="{name:'ServiceDetail', params:{key:microService.key}}">详情</router-link> | <router-link :to="{name:'ServiceInstance', params:{key:microService.key}}">实例</router-link> | <a href="#" @click="onUnreg(microService.key)" :v-bind="microService.key">注销</a>
+      </div>
+  </li>
 </template>
 
 <style lang="stylus" scoped>
@@ -25,8 +23,8 @@ export default {
     }
   },
   methods: {
-    onUnreg: function (e) {
-      console.log(this.microService.key)
+    onUnreg: function (microKey) {
+      alert(microKey)
     }
   }
 }

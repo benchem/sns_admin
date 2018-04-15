@@ -3,10 +3,10 @@
     <router-link :to="{name:'ServicesManagement'}">返回</router-link>
     <div>
       <label for="lb">service key</label>
-      <input name="lb" type="text" v-model="serviceModel.key">
+      <input name="lb" type="text" v-model="serviceModel.key" disabled="disabled"/>
 
       <label for="desc">desc</label>
-      <input type="text" v-model="serviceModel.desc">
+      <input type="text" v-model="serviceModel.desc" disabled="disabled"/>
     </div>
     <div>
       <input type="radio" name="access_type" id="access_type_0" value="0" v-model="serviceModel.access_type">

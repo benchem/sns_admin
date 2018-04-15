@@ -3,11 +3,11 @@
       <button @click="onCreate">{{createButtonText}}</button>
       <button @click="onReload">{{reloadButtonText}}</button>
       <ul>
-      <ListItem
+      <listItem
         :microService="microService"
         v-for="microService in serviceArr"
         :key="microService.key"
-      ></ListItem>
+      ></listItem>
       </ul>
   </div>
 </template>
@@ -41,7 +41,7 @@ export default {
     }
   },
   components: {
-    'ListItem': listItem
+    'listItem': listItem
   },
   created: function (e) {
     reloadList(this)
