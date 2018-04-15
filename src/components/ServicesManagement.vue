@@ -3,13 +3,24 @@
     <div v-if="!isCreateMode">
       <el-button @click="onCreate">{{createButtonText}}</el-button>
       <el-button @click="onReload">{{reloadButtonText}}</el-button>
-      <ul>
-        <listItem
-          :microService="microService"
-          v-for="microService in serviceArr"
-          :key="microService.key"
-        ></listItem>
-      </ul>
+      <el-table style="width: 90%" :data="serviceArr">
+        <el-table-column
+          label="Service Key"
+          prop="key"
+          width="180"
+        ></el-table-column>
+        <el-table-column
+          label="Service Desc"
+          prop="desc"
+        ></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <router-link :to="{name:'ServiceDetail', params:{key:scope.row.key}}" class="el-button el-button--text">详情</router-link>
+            <router-link :to="{name:'ServiceInstance', params:{key:scope.row.key}}" class="el-button el-button--text">实例</router-link>
+            <i class='el-icon-delete' @click="onUnreg(scope.row.key)" :v-bind="scope.row.key"></i>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
     <div v-else>
       <label for="txtSvrName">Service Name</label>
@@ -29,7 +40,6 @@
 </style>
 
 <script>
-import listItem from '@/ServicesManagement/ListItem.vue'
 import axios from 'axios'
 
 function reloadList (pageCtx) {
@@ -54,9 +64,6 @@ export default {
         desc: ''
       }
     }
-  },
-  components: {
-    'listItem': listItem
   },
   created: function (e) {
     reloadList(this)
@@ -87,6 +94,9 @@ export default {
     },
     onCancel: function (e) {
       this.isCreateMode = false
+    },
+    onUnreg: function (microKey) {
+      alert(microKey)
     }
   }
 }
