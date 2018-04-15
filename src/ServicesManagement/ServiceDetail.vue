@@ -55,10 +55,14 @@ function commitDetail (pageCtx) {
     access_type: pageCtx.serviceModel.access_type,
     list: pageCtx.serviceModel.access_list
   }
-  console.log(commitPackage)
   axios.post(apiHost + '/access/setdetail', commitPackage).then(
     function (response) {
-      console.log(response)
+      if (response.data.statecode !== 0) {
+        alert(response.data.errmsg)
+        return
+      }
+      alert('保存成功')
+      pageCtx.router.push({name: 'ServicesManagement'})
     }
   ).catch(
     function (err) {
@@ -77,7 +81,7 @@ export default {
   created: function (e) {
     this.key = this.$route.params.key
     if (this.key === undefined || this.key.length === 0) {
-      this.$route.push({name: 'ServicesManagement'})
+      this.router.push({name: 'ServicesManagement'})
     }
     loadDetail(this)
   },

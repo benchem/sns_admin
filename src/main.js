@@ -7,6 +7,7 @@ import Global_ from './Global.vue'
 
 Vue.config.productionTip = false
 Vue.prototype.GLOBAL = Global_
+Vue.prototype.router = router
 
 /* eslint-disable no-new */
 new Vue({
