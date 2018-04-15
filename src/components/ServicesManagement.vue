@@ -1,8 +1,8 @@
 <template>
   <div class="svrlst">
     <div v-if="!isCreateMode">
-      <button @click="onCreate">{{createButtonText}}</button>
-      <button @click="onReload">{{reloadButtonText}}</button>
+      <el-button @click="onCreate">{{createButtonText}}</el-button>
+      <el-button @click="onReload">{{reloadButtonText}}</el-button>
       <ul>
         <listItem
           :microService="microService"
