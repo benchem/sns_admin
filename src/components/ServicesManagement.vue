@@ -21,7 +21,7 @@
           label="Service Desc"
           prop="desc"
         ></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="120">
           <template slot-scope="scope">
             <router-link :to="{name:'ServiceDetail', params:{key:scope.row.key}}" class="el-button el-button--text"><i class="el-icon-edit"></i></router-link>
             <router-link :to="{name:'ServiceInstance', params:{key:scope.row.key}}" class="el-button el-button--text"><i class="el-icon-upload"></i></router-link>
