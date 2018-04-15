@@ -2,8 +2,8 @@
   <div class="svrlst">
     <div align="left">
       <div v-if="!isCreateMode">
-        <el-button @click="onCreate">{{createButtonText}}</el-button>
         <el-button @click="onReload">{{reloadButtonText}}</el-button>
+        <el-button @click="onCreate">{{createButtonText}}</el-button>
       </div>
       <div v-else>
         <el-button @click="onSubmit">Save</el-button>
