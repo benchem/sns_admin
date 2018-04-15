@@ -6,8 +6,8 @@
         <el-button @click="onCreate">{{createButtonText}}</el-button>
       </div>
       <div v-else>
-        <el-button @click="onSubmit">Save</el-button>
         <el-button @click="onCancel">Cancel</el-button>
+        <el-button @click="onSubmit" type="primary">Save</el-button>
       </div>
     </div>
     <div v-if="!isCreateMode">
@@ -84,6 +84,11 @@ export default {
     },
     onReload: function (e) {
       reloadList(this)
+      this.$message({
+        message: '服务列表刷新成功',
+        type: 'success',
+        duration: 1000
+      })
     },
     onSubmit: function (e) {
       let that = this
@@ -135,7 +140,7 @@ export default {
           })
           that.serviceArr.splice(that.serviceArr.findIndex(item => item.key === microKey), 1)
         })
-      })
+      }).catch(() => {})
     }
   }
 }

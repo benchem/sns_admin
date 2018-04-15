@@ -5,7 +5,7 @@
     </el-container>
     <el-container style="border: 1px solid #eee">
       <el-aside width='200px' style='background-color: rgb(238, 241, 246)'>
-        <navMemn></navMemn>
+        <navMenu></navMenu>
       </el-aside>
       <el-main>
         <router-view/>
@@ -15,17 +15,12 @@
 </template>
 
 <script>
-import navMemu from '@/components/NavMenu'
+import navMenu from '@/components/NavMenu'
 
 export default {
   name: 'App',
   components: {
-    'navMemn': navMemu
+    'navMenu': navMenu
   }
 }
 </script>
-
-<style>
-#app {
-}
-</style>
