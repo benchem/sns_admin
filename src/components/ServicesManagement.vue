@@ -23,9 +23,9 @@
         ></el-table-column>
         <el-table-column label="操作" width="120">
           <template slot-scope="scope">
-            <router-link :to="{name:'ServiceDetail', params:{key:scope.row.key}}" class="el-button el-button--text"><i class="el-icon-edit"></i></router-link>
-            <router-link :to="{name:'ServiceInstance', params:{key:scope.row.key}}" class="el-button el-button--text"><i class="el-icon-upload"></i></router-link>
-            &nbsp;<i class='el-icon-delete' @click="onUnreg(scope.row.key)" :v-bind="scope.row.key"></i>
+            <router-link :to="{name:'ServiceDetail', params:{key:scope.row.key}}" class="el-button el-button--text el-icon-edit"></router-link>
+            <router-link :to="{name:'ServiceInstance', params:{key:scope.row.key}}" class="el-button el-button--text el-icon-upload"></router-link>
+            <a class='el-button el-button--text el-icon-delete' @click="onUnreg(scope.row.key)" :v-bind="scope.row.key"></a>
           </template>
         </el-table-column>
       </el-table>
