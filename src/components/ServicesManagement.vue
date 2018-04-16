@@ -1,45 +1,39 @@
 <template>
   <div class="svrlst">
-    <div align="left">
-      <div v-if="!isCreateMode">
-        <el-button @click="onReload">{{reloadButtonText}}</el-button>
-        <el-button @click="onCreate">{{createButtonText}}</el-button>
-      </div>
-      <div v-else>
-        <el-button @click="onCancel">Cancel</el-button>
-        <el-button @click="onSubmit" type="primary">Save</el-button>
-      </div>
-    </div>
-    <div v-if="!isCreateMode">
-      <el-table style="width: 100%" :data="serviceArr">
-        <el-table-column
-          label="Service Key"
-          prop="key"
-          width="180"
-        ></el-table-column>
-        <el-table-column
-          label="Service Desc"
-          prop="desc"
-        ></el-table-column>
-        <el-table-column label="操作" width="120">
-          <template slot-scope="scope">
-            <router-link :to="{name:'ServiceDetail', params:{key:scope.row.key}}" class="el-button el-button--text el-icon-edit"></router-link>
-            <router-link :to="{name:'ServiceInstance', params:{key:scope.row.key}}" class="el-button el-button--text el-icon-upload"></router-link>
-            <a class='el-button el-button--text el-icon-delete' @click="onUnreg(scope.row.key)" :v-bind="scope.row.key"></a>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div v-else>
-      <el-form>
-        <el-form-item label="Service Name">
-          <el-input type="text" name="txtSvrName" v-model="createObj.key" placeholder="Service Name"></el-input>
+    <el-button @click="onReload">{{reloadButtonText}}</el-button>
+    <el-button @click="onCreate">{{createButtonText}}</el-button>
+    <el-table style="width: 100%" :data="serviceArr" v-loading="isLoading">
+      <el-table-column
+        label="Service Key"
+        prop="key"
+        width="180"
+      ></el-table-column>
+      <el-table-column
+        label="Service Desc"
+        prop="desc"
+      ></el-table-column>
+      <el-table-column label="操作" width="120">
+        <template slot-scope="scope">
+          <router-link :to="{name:'ServiceDetail', params:{key:scope.row.key}}" class="el-button el-button--text el-icon-edit"></router-link>
+          <router-link :to="{name:'ServiceInstance', params:{key:scope.row.key}}" class="el-button el-button--text el-icon-upload"></router-link>
+          <a class='el-button el-button--text el-icon-delete' @click="onUnreg(scope.row.key)" :v-bind="scope.row.key"></a>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-dialog title="注册新服务" :visible.sync="isCreateMode" :close-on-click-modal="false">
+      <el-form :model="createObj" :rules="createRules" ref="createObj">
+        <el-form-item label="Service Name" prop="key">
+          <el-input v-model="createObj.key" placeholder="Service Name" auto-complete="false"></el-input>
         </el-form-item>
-        <el-form-item label="Service Desc">
-          <el-input type="text" name="txtSvrDesc" v-model="createObj.desc" placeholder="Service Desc"></el-input>
+        <el-form-item label="Service Desc" prop="desc">
+          <el-input v-model="createObj.desc" placeholder="Service Desc" auto-complete="false"></el-input>
         </el-form-item>
+        <div align="right">
+          <el-button @click.native="isCreateMode = false">Cancel</el-button>
+          <el-button @click="onSubmit" type="primary">Save</el-button>
+        </div>
       </el-form>
-    </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -62,16 +56,47 @@ function reloadList (pageCtx) {
   })
 }
 
+function createService (pageCtx) {
+  pageCtx.isLoading = true
+  axios.post(pageCtx.GLOBAL.apiHost + '/svc/register', pageCtx.createObj).then(
+    function (response) {
+      if (response.data.statecode !== 0) {
+        alert(response.data.errmsg)
+        return
+      }
+      pageCtx.$refs['createObj'].resetFields()
+      pageCtx.$message({
+        showClose: true,
+        message: '服务注册成功',
+        type: 'success'
+      })
+      reloadList(pageCtx)
+      pageCtx.isLoading = false
+      pageCtx.isCreateMode = false
+    }
+  ).catch(
+    function (ex) {
+      pageCtx.isLoading = false
+    }
+  )
+}
+
 export default {
   data () {
     return {
       createButtonText: 'Create',
       reloadButtonText: 'Refresh',
       serviceArr: [],
+      isLoading: false,
       isCreateMode: false,
       createObj: {
         key: '',
         desc: ''
+      },
+      createRules: {
+        key: [
+          {required: true, message: '请输入Service Key', trigger: 'blur'}
+        ]
       }
     }
   },
@@ -92,28 +117,11 @@ export default {
     },
     onSubmit: function (e) {
       let that = this
-      axios.post(this.GLOBAL.apiHost + '/svc/register', this.createObj).then(
-        function (response) {
-          if (response.data.statecode !== 0) {
-            alert(response.data.errmsg)
-            return
-          }
-          that.$message({
-            showClose: true,
-            message: '服务注册成功',
-            type: 'success'
-          })
-          reloadList(that)
-          that.isCreateMode = false
+      this.$refs.createObj.validate((valid) => {
+        if (valid) {
+          createService(that)
         }
-      ).catch(
-        function (ex) {
-
-        }
-      )
-    },
-    onCancel: function (e) {
-      this.isCreateMode = false
+      })
     },
     onUnreg: function (microKey) {
       let that = this
