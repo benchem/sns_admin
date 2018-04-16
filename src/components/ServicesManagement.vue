@@ -47,17 +47,19 @@
 import axios from 'axios'
 
 function reloadList (pageCtx) {
+  pageCtx.isLoading = true
   axios.get(pageCtx.GLOBAL.apiHost + '/svc/getlist').then(function (response) {
     if (response.data.statecode !== 0) {
+      pageCtx.isLoading = false
       alert(response.errmsg)
       return
     }
     pageCtx.serviceArr = response.data.result
+    pageCtx.isLoading = false
   })
 }
 
 function createService (pageCtx) {
-  pageCtx.isLoading = true
   axios.post(pageCtx.GLOBAL.apiHost + '/svc/register', pageCtx.createObj).then(
     function (response) {
       if (response.data.statecode !== 0) {
@@ -71,12 +73,11 @@ function createService (pageCtx) {
         type: 'success'
       })
       reloadList(pageCtx)
-      pageCtx.isLoading = false
       pageCtx.isCreateMode = false
     }
   ).catch(
     function (ex) {
-      pageCtx.isLoading = false
+
     }
   )
 }
