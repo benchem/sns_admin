@@ -10,7 +10,7 @@
               <el-input v-model="currentObject[headItem.column]" disabled="disabled"/>
             </template>
             <template v-else-if="headItem.isLookup">
-              <Lookup v-model="currentObject[headItem.column]"/>
+              <Lookup v-model="currentObject[headItem.column]" :currentObj="currentObject" :columnName="headItem.column"/>
             </template>
             <template v-else-if="headItem.dataType === 'System.DateTime'">
               <el-date-picker v-model="currentObject[headItem.column]" type="datetime" placeholder="选择日期时间"/>
@@ -89,10 +89,8 @@ export default {
       currentObject: {
         FBillNo: '保存时创建',
         FSupplier: '',
+        FDate: new Date(),
         Entity: []
-      },
-      headLpOptions: {
-
       }
     }
   },
