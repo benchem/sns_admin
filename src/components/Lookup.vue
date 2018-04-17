@@ -40,9 +40,9 @@ export default {
   },
   methods: {
     loadData: function (query) {
-      console.log(query)
-      console.log(this.currentObj)
-      console.log(this.columnName)
+      // console.log(query)
+      // console.log(this.currentObj)
+      // console.log(this.columnName)
     }
   }
 }
