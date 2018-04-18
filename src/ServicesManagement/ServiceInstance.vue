@@ -34,13 +34,13 @@
       </div>
         <el-button  type="primary" class="twoSave"  @click="addService" id="ServiceButton">配置</el-button>
         <div class="svrInstBottom" >
-          <div v-for="item,oItem in serviceModel.items"  >
+          <div v-for="(item,oItem) in serviceModel.items" :key="item">
             <p>{{oItem+1}}.{{item.url}} </p>
             <a href="#" @click="remove(item)">Remove</a>
           </div>
         </div>
           <el-button @click="onSave" type="primary" class="oSave">Save</el-button>
-	  </div>
+    </div>
   </div>
 </template>
 
@@ -52,9 +52,9 @@ export default {
     return {
       key: '',
       serviceModel: {},
-      oInput : '',
-      tInput : '',
-      thInput : '',
+      oInput: '',
+      tInput: '',
+      thInput: ''
     }
   },
   created: function (e) {
@@ -68,19 +68,18 @@ export default {
     addService: function (e) {
       // var serviceName = e.target.value.trim()
       //   console.log(serviceName);
-        
-      //   e.target.value = ''      
-      if (this.oInput == "" || this.tInput == "" || this.thInput == "" ) {
-          alert('请输入数据')
-          return;
-        }else{
-          sessionStorage.setItem("0",this.oInput);
-          sessionStorage.setItem("1",this.tInput);
-          sessionStorage.setItem("2",this.thInput);
-        alert("配置成功");
-        }
-      // this.serviceModel.items.unshift(serviceName);      
-},
+
+      //   e.target.value = ''
+      if (this.oInput === '' || this.tInput === '' || this.thInput === '') {
+        alert('请输入数据')
+      } else {
+        sessionStorage.setItem('0', this.oInput)
+        sessionStorage.setItem('1', this.tInput)
+        sessionStorage.setItem('2', this.thInput)
+        alert('配置成功')
+      }
+      // this.serviceModel.items.unshift(serviceName);
+    },
     remove: function (callerKey) {
       this.serviceModel.items.splice(this.serviceModel.items.findIndex(item => item === callerKey), 1)
     },
@@ -93,63 +92,62 @@ export default {
 function loadDetail (pageCtx) {
   let apiHost = pageCtx.GLOBAL.apiHost
   axios.get(apiHost + '/svc/getdetail?key=' + pageCtx.key)
-  .then(function (response) {
-    console.log(response);
+    .then(function (response) {
+      console.log(response)
       if (response.data.statecode !== 0) {
         alert(response.data.errmsg)
         return
       }
       pageCtx.serviceModel = response.data.result
     }
-  )
+    )
 }
 
 function commitDetail (pageCtx) {
-  let apiHost = pageCtx.GLOBAL.apiHost;
+  let apiHost = pageCtx.GLOBAL.apiHost
   var commitPackage = {
     svc_key: pageCtx.serviceModel.key,
-    desc : pageCtx.serviceModel.desc,
-    url : sessionStorage.getItem("0"),
-    timeout : sessionStorage.getItem("1"),
-    weight : sessionStorage.getItem("2")
+    desc: pageCtx.serviceModel.desc,
+    url: sessionStorage.getItem('0'),
+    timeout: sessionStorage.getItem('1'),
+    weight: sessionStorage.getItem('2')
   }
   axios.post(apiHost + '/inst/register', commitPackage)
-  .then(function (response) {
-    console.log(response);
+    .then(function (response) {
+      console.log(response)
       if (response.data.statecode !== 0) {
         alert(response.data.errmsg)
         return
       }
-      sessionStorage.removeItem("0");
-      sessionStorage.removeItem("1");
-      sessionStorage.removeItem("2");
+      sessionStorage.removeItem('0')
+      sessionStorage.removeItem('1')
+      sessionStorage.removeItem('2')
       alert('保存成功')
       pageCtx.router.push({name: 'ServicesManagement'})
     }
-  ).catch(
-    function (err) {
-      console.log(err)
-    }
-  )
+    ).catch(
+      function (err) {
+        console.log(err)
+      }
+    )
 }
 </script>
 
-
 <style scoped>
-	#svrInst .SericeDetallBack {
-		background-color: #409eff;
-		text-decoration: none;
-		color: #fff;
-		padding: .7% 1.5%;
-		font-size: 13px;
-		border-radius: 5px;
-	}
-	#svrInst .svrInstTop {
-		margin-top: 2%;
-	}
-	#svrInst .svrInstTopInput {
-		width: 30%;
-	}
+  #svrInst .SericeDetallBack {
+  background-color: #409eff;
+  text-decoration: none;
+  color: #fff;
+  padding: .7% 1.5%;
+  font-size: 13px;
+  border-radius: 5px;
+  }
+  #svrInst .svrInstTop {
+    margin-top: 2%;
+  }
+  #svrInst .svrInstTopInput {
+    width: 30%;
+  }
   #svrInst .svrInstTop .svrInstTopInputTwo {
     width: 30%;
     margin-top: 1%;
@@ -158,7 +156,7 @@ function commitDetail (pageCtx) {
     margin-top: 3%;
   }
   .twoSave {
-    margin-top: 1%; 
+    margin-top: 1%;
   }
   #svrInst .svrInstBottom p {
     padding-bottom: 1%;
