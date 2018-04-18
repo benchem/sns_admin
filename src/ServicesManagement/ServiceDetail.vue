@@ -16,11 +16,6 @@
     </el-input>
     </div>
     <div class="svrDetailTopCenter">
-    <!-- <el-radio-group v-model="radio2">
-    <el-radio :label="0" name="access_type" id="access_type_0" value="0" v-model="serviceModel.access_type">公开</el-radio>
-    <el-radio :label="1" name="access_type" id="access_type_1" value="1" v-model="serviceModel.access_type">白名单</el-radio>
-    <el-radio :label="2" name="access_type" id="access_type_2" value="2" v-model="serviceModel.access_type">黑名单</el-radio>
-    </el-radio-group> -->
     <ul class="svrDetailTopCenterUl">
       <li>
         <input type="radio" name="access_type" id="access_type_0" value="0" v-model="serviceModel.access_type">公开
@@ -35,9 +30,9 @@
     </div>
     <!-- 表格 -->
   <div v-if="serviceModel.access_type > 0">
-      <el-input type="text" placeholder="请输入服务名"  class="ServiceDetailBottom" @keyup.enter.native="addService" ></el-input>
+      <el-input type="text" placeholder="请输入服务名(轻敲回车确认)"  class="ServiceDetailBottom" @keyup.enter.native="addService" ></el-input>
         <div class="ServiceDetailBottomUl">
-          <div v-for="(item,oItem) in serviceModel.access_list" :key="item">
+          <div v-for="(item,oItem) in serviceModel.access_list" :key="item.id">
             <p>{{oItem+1}}.{{item}} </p><br>
             <a href="#" @click="remove(item)">Remove</a>
           </div>
