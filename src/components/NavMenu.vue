@@ -1,58 +1,33 @@
 <template>
-  <el-menu :default-openeds="['1', '3']">
-    <el-submenu index="1">
-      <template slot="title"><i class="el-icon-message"></i>导航一</template>
-      <el-menu-item-group>
-        <template slot="title">分组一</template>
-        <el-menu-item index="1-1"><router-link :to="{name: 'ServicesManagement'}">微服务管理</router-link></el-menu-item>
-        <el-menu-item index="1-2"><router-link :to="{name: 'BillEngineDemo'}">Bill Engine Demo</router-link></el-menu-item>
-      </el-menu-item-group>
-      <el-menu-item-group title="分组2">
-        <el-menu-item index="1-3">选项3</el-menu-item>
-      </el-menu-item-group>
-      <el-submenu index="1-4">
-        <template slot="title">选项4</template>
-        <el-menu-item index="1-4-1">选项4-1</el-menu-item>
-      </el-submenu>
-    </el-submenu>
-    <el-submenu index="2">
-      <template slot="title"><i class="el-icon-menu"></i>导航二</template>
-      <el-menu-item-group>
-        <template slot="title">分组一</template>
-        <el-menu-item index="2-1">选项1</el-menu-item>
-        <el-menu-item index="2-2">选项2</el-menu-item>
-      </el-menu-item-group>
-      <el-menu-item-group title="分组2">
-        <el-menu-item index="2-3">选项3</el-menu-item>
-      </el-menu-item-group>
-      <el-submenu index="2-4">
-        <template slot="title">选项4</template>
-        <el-menu-item index="2-4-1">选项4-1</el-menu-item>
-      </el-submenu>
-    </el-submenu>
-    <el-submenu index="3">
-      <template slot="title"><i class="el-icon-setting"></i>导航三</template>
-      <el-menu-item-group>
-        <template slot="title">分组一</template>
-        <el-menu-item index="3-1">选项1</el-menu-item>
-        <el-menu-item index="3-2">选项2</el-menu-item>
-      </el-menu-item-group>
-      <el-menu-item-group title="分组2">
-        <el-menu-item index="3-3">选项3</el-menu-item>
-      </el-menu-item-group>
-      <el-submenu index="3-4">
-        <template slot="title">选项4</template>
-        <el-menu-item index="3-4-1">选项4-1</el-menu-item>
-      </el-submenu>
+  <el-menu :default-active="focusIndex">
+    <el-submenu :v-model="channel" v-for="channel in mainMenu" :key="channel.name" :index="channel.name">
+        <template slot="title"><i class="el-icon-message"></i>{{channel.caption}}</template>
+        <el-menu-item-group :index="group.name" :v-model="group" v-for="group in channel.groups" :key="group.name">
+          <template slot="title">{{group.caption}}</template>
+          <el-menu-item :index="func.name" :v-model="func" v-for="func in group.functions" :key="func.name" @click="menuClick(func)">{{func.caption}}</el-menu-item>
+        </el-menu-item-group>
     </el-submenu>
   </el-menu>
 </template>
 
 <script>
+import { getMemus } from '@/utils/api.js'
+
 export default {
   data () {
     return {
-
+      focusIndex: 'serviceManager'
+    }
+  },
+  computed: {
+    mainMenu () {
+      return getMemus()
+    }
+  },
+  methods: {
+    menuClick (func) {
+      this.focusIndex = func.name
+      this.router.push(func.component)
     }
   }
 }

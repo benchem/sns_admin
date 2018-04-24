@@ -3,17 +3,17 @@
     <el-container>
       <el-header>
         <el-row>
-          <el-col span="23">
+          <el-col :span="23">
             <h1>微服务管理中心</h1>
           </el-col>
-          <el-col span="1">
+          <el-col :span="1">
             <el-button @click="logout">退出</el-button>
           </el-col>
         </el-row>
       </el-header>
     </el-container>
     <el-container style="border: 1px solid #eee">
-      <el-aside width='200px' style='background-color: rgb(238, 241, 246)'>
+      <el-aside>
         <navMenu></navMenu>
       </el-aside>
       <el-main>

@@ -3,11 +3,12 @@ import Router from 'vue-router'
 import ServicesManagement from '@/ServicesManagement/Index'
 import ServiceDetail from '@/ServicesManagement/ServiceDetail'
 import ServiceInstance from '@/ServicesManagement/ServiceInstance'
-import BillEngineDemo from '@/billengine/demo'
+import BillEngineDemo from '@/billengine/listviewpage'
 import BillDetailEngineDemo from '@/billengine/detail'
 import Login from '@/Views/Login'
 import Layout from '@/Views/layout/layout'
 import Index from '@/Views/index/index'
+import NotFound from '@/Views/404'
 
 Vue.use(Router)
 
@@ -46,13 +47,16 @@ export default new Router({
       component: Layout,
       children: [{
         name: 'BillEngineDemo',
-        path: 'demo',
+        path: '',
         component: BillEngineDemo
       }, {
         name: 'BillDetailEngineDemo',
         path: 'detail',
         component: BillDetailEngineDemo
       }]
+    }, {
+      path: '*',
+      component: NotFound
     }
   ]
 })
